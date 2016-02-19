@@ -1,0 +1,7 @@
+pexpect
+pyinotify
+argparse
+
+[dev]
+
+[test]

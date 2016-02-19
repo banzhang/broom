@@ -1,0 +1,19 @@
+service broomd
+{
+
+        disable = no
+        instances = 10
+        flags          = REUSE KEEPALIVE
+        type            = UNLISTED
+        port            = 9999
+        protocol        = tcp
+        socket_type    = stream
+        wait            = no
+        user            = root
+        server          = /usr/local/bin/broomd
+        server_args     = -c /etc/broom.conf
+        log_on_success = PID HOST EXIT
+        log_type        = FILE /var/adm/broomdlog
+        log_on_failure  += USERID HOST
+        rlimit_cpu     = 10
+}

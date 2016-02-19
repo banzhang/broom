@@ -1,0 +1,4 @@
+[console_scripts]
+broom = broom:main
+broomd = broom:server
+
