@@ -12,14 +12,14 @@ A log collection project
 不支持
 1:同一个文件断点续传
 
-----INSTALL-----
-server
-1:cp broom/skel/broom.conf /etc/broom.conf
-2:安装xinetd
-3:cp broom/skel/broomd /etc/xinetd/broomd
-4:重启xinetd
-5:netstat -anlpt|grep 9999
-
-client
-1: cp broom/skel/broom.conf /etc/broom.conf
-2: 订制自己的broom.conf
+----INSTALL-----  
+server  
+1:cp broom/skel/broom.conf /etc/broom.conf  
+2:安装xinetd  
+3:cp broom/skel/broomd /etc/xinetd/broomd  
+4:重启xinetd  
+5:netstat -anlpt|grep 9999  
+  
+client  
+1: cp broom/skel/broom.conf /etc/broom.conf  
+2: 订制自己的broom.conf  
