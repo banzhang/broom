@@ -13,6 +13,8 @@ A log collection project
 1:同一个文件断点续传
 
 ----INSTALL-----  
+python setup.py install
+
 server  
 1:cp broom/skel/broom.conf /etc/broom.conf  
 2:安装xinetd  
