@@ -26,7 +26,7 @@ client
 1: cp broom/skel/broom.conf /etc/broom.conf  
 2: 订制自己的broom.conf  
 ----USEAGE-----  
-日志文件命名请遵循如下规则
-custom20160223 按日期切割
-custom2016022301 按小时切割
-broom -c /etc/broom.conf
+日志文件命名请遵循如下规则  
+custom20160223 按日期切割  
+custom2016022301 按小时切割  
+broom -c /etc/broom.conf  
