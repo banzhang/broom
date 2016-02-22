@@ -4,6 +4,7 @@ import logging,pyinotify,Queue,threading,time,os
 import PyScp
 from LogClient import LogClient
 import Config
+from Util import *
 
 '''sync the file'''
 class Sync:
@@ -42,8 +43,29 @@ class Sync:
 
     @classmethod
     def needSync(cla, path, noChangeTime=3600):
+        name = os.path.basename(path)
+        cTimeFlag = reverseStr(name)
+        cTimeFlag = intval(cTimeFlag)
+        cTimeFlag = reverseStr(str(cTimeFlag))
+        timeStamp = time.time()
+        localTime = time.localtime(timeStamp)
+        timeFlagDay = time.strftime("%Y%m%d", localTime)
+        timeFlagHour = time.strftime("%Y%m%d%H", localTime)
+        import pdb
+        pdb.set_trace()
+        if len(cTimeFlag) == len(timeFlagDay):
+            if cTimeFlag == timeFlagDay:
+                return False
+        elif len(cTimeFlag) == len(timeFlagHour):
+            if cTimeFlag == timeFlagHour:
+                return False
+
         stat = os.stat(path)
         if stat.st_mtime+noChangeTime <= time.time():
             return True
 
         return False
+
+if __name__ == '__main__':
+    print Sync.needSync('/tmp/fs2016022301', 60)
+    print Sync.needSync('/tmp/fs20160223', 60)
