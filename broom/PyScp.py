@@ -28,9 +28,12 @@ def buildScp(user, hostname, path, local, option=' '):
 '''执行文件拷贝'''
 def doScp(cmd, pd):
     try:
+        logger.debug(cmd)
+        logger.debug(pd)
         worker = pexpect.spawn(cmd)
         worker.logfile = sys.stdout
         i = worker.expect([pexpect.TIMEOUT, SSH_NEWKEY, '(?i)password'], 120)
+        logger.debug(i)
         if i == 0:
             logger.debug('ERROR! could not login with SSH. Here is what SSH said:')
             logger.debug(worker.before)
@@ -46,7 +49,7 @@ def doScp(cmd, pd):
                 logger.debug('DONE! Here is what SSH said:')
                 logger.debug(worker.before)
                 logger.debug(worker.after)
-            j =  worker.expect([pexpect.TIMEOUT, pexpect.EOF])
+            j =  worker.expect([pexpect.exceptions.TIMEOUT, pexpect.exceptions.EOF])
             if j == 0:
                 logger.debug('ERROR! Timeout. Here is what SSH said:')
                 logger.debug(worker.before)
@@ -94,7 +97,7 @@ if __name__ == '__main__':
         user='root'
         pwd='12345678'
         path='/tmp/'
-        local='/tmp/f0/f0'
+        local='/var/log/ygtoo/request/2016/post20160121'
         cmd = buildScp(user, server, path, local)
         doScp(cmd, pwd)
     except SystemExit, e:
