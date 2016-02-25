@@ -7,6 +7,8 @@ __author__ = 'houweizong@gmail.com'
           
 import logging,sys,time,logging.handlers
 import pexpect
+import Config
+import Logger
 
 
 SSH_NEWKEY = '(?i)are you sure you want to continue connecting'
@@ -14,14 +16,13 @@ SSH_PASSWORD = "[pP]assword:"
 SCP = 'scp %s %s %s@%s:%s' #scp option localpath user@hostname:/path
 SCP_OPTION = ' -l 40960 -C '
 
-'''配置日志'''
-logging.basicConfig(level=logging.DEBUG)
+logger = Logger.getInstance()
 
 '''构建 scp命令'''
 def buildScp(user, hostname, path, local, option=' '):
     SCP = 'scp %s %s %s@%s:%s' #scp option localpath user@hostname:/path
     res = SCP%(option, local, user, hostname, path)
-    logging.debug(res)
+    logger.debug(res)
     return res
 
 '''执行文件拷贝'''
@@ -31,57 +32,57 @@ def doScp(cmd, pd):
         worker.logfile = sys.stdout
         i = worker.expect([pexpect.TIMEOUT, SSH_NEWKEY, '(?i)password'], 120)
         if i == 0:
-            logging.debug('ERROR! could not login with SSH. Here is what SSH said:')
-            logging.debug(worker.before)
-            logging.debug(worker.after)
+            logger.debug('ERROR! could not login with SSH. Here is what SSH said:')
+            logger.debug(worker.before)
+            logger.debug(worker.after)
             sys.exit (1)
         if i == 1:
-            logging.debug('new server add to knowhosts!')
+            logger.debug('new server add to knowhosts!')
             worker.sendline('yes')
             k = worker.expect([SSH_PASSWORD])
             worker.sendline(pd)
             e = worker.expect('100%', 2400)
             if e == 0:
-                logging.debug('DONE! Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('DONE! Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
             j =  worker.expect([pexpect.TIMEOUT, pexpect.EOF])
             if j == 0:
-                logging.debug('ERROR! Timeout. Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('ERROR! Timeout. Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
             elif j == 1:
-                logging.debug('DONE! Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('DONE! Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
             else:
-                logging.debug('UNEXPECT!  Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('UNEXPECT!  Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
         if i == 2:
             worker.sendline(pd)
             e = worker.expect('100%', 2400)
             if e == 0:
-                logging.debug('DONE! Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('DONE! Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
                 
             j =  worker.expect([pexpect.TIMEOUT, pexpect.EOF])
             if j == 0:
-                logging.debug('ERROR! Timeout. Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('ERROR! Timeout. Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
             elif j == 1:
-                logging.debug('DONE! Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('DONE! Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
             else:
-                logging.debug('UNEXPECT!  Here is what SSH said:')
-                logging.debug(worker.before)
-                logging.debug(worker.after)
+                logger.debug('UNEXPECT!  Here is what SSH said:')
+                logger.debug(worker.before)
+                logger.debug(worker.after)
         return True
     except Exception, e:
-        logging.exception(e)
+        logger.exception(e)
         return False
         
 
@@ -97,11 +98,11 @@ if __name__ == '__main__':
         cmd = buildScp(user, server, path, local)
         doScp(cmd, pwd)
     except SystemExit, e:
-        logging.debug('endTime come!')
-        logging.exception(e)
+        logger.debug('endTime come!')
+        logger.exception(e)
     except KeyboardInterrupt, e:
-        logging.debug('exit by ctrl+c!')
-        logging.exception(e)
+        logger.debug('exit by ctrl+c!')
+        logger.exception(e)
     except Exception, e:
-        logging.debug('unknow!')
-        logging.exception(e)
+        logger.debug('unknow!')
+        logger.exception(e)

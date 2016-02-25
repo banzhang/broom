@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
 import pyinotify,Queue,threading,time,os,argparse
 from ThreadPool import ThreadPool

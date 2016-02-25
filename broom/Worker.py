@@ -1,8 +1,12 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
 import threading,Queue,time,logging
 from Sync import Sync
-import Config
+import Config,Logger
+
+logger = Logger.getInstance()
+
 '''
 customer for queue
 '''
@@ -19,31 +23,31 @@ class Worker(threading.Thread):
         while True:
             runTime = time.time()-self.startTime
             if runTime >  43200:
-                logging.debug('exit...')
+                logger.debug('exit...')
                 exit()
             else:
                 blockTime = 43200 - runTime
-            logging.debug('run...')
+            logger.debug('run...')
             try:
                 event = self.syncQueue.get(True, blockTime)
             except Exception as e:
-                logging.debug('exit...')
+                logger.debug('exit...')
                 exit()
-            logging.info('get file: '+event)
+            logger.info('get file: '+event)
             if Sync.needSync(event, float(self.nochangetime)):
-                logging.debug('upload')
+                logger.debug('upload')
                 res = Sync.upload(event)
                 if not res:
                     self.syncQueue.put(event)
                 time.sleep(5)
             else:
-                logging.debug('in changeing: '+event)
+                logger.debug('in changeing: '+event)
                 needSleep = False
                 if self.syncQueue.empty():
-                    logging.debug('needsleep')
+                    logger.debug('needsleep')
                     needSleep = True
                 self.syncQueue.put(event)
-                logging.debug('skeep..')
+                logger.debug('skeep..')
                 if needSleep:
-                    logging.debug('sleep '+self.sleeptime)
+                    logger.debug('sleep '+self.sleeptime)
                     time.sleep(float(self.sleeptime))

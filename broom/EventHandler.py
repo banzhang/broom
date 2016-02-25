@@ -1,7 +1,10 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
-import pyinotify,Queue,logging
+import pyinotify,Queue,logging,Config
+import Logger
 
+logger = Logger.getInstance()
 
 class EventHandler(pyinotify.ProcessEvent): 
    def __init__(self, events_queue): 
@@ -10,6 +13,6 @@ class EventHandler(pyinotify.ProcessEvent):
    def my_init(self): 
      pass
    def process_IN_CREATE(self,event):
-     logging.debug(event)
+     logger.debug(event)
      if not event.dir:
         self.events_queue.put(event.pathname)

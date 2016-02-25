@@ -1,7 +1,10 @@
 #!/usr/bin/env python
-# -*- conding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
-import Queue,threading,time,logging,Worker
+import Queue,threading,time,logging,Worker,Config
+import Logger
+
+logger = Logger.getInstance()
 
 class WorkerTest(threading.Thread):
     def __init__(self):
@@ -10,7 +13,7 @@ class WorkerTest(threading.Thread):
     def run(self):
         i = 1
         while i<6:
-            logging.debug(self.name+':'+str(i))
+            logger.debug(self.name+':'+str(i))
             i = i+1
         print 'end'
         exit()
@@ -21,7 +24,7 @@ class ThreadPool:
     def start(cla, max, queue):
         pool = []
         while True:
-            logging.debug('pool len:'+str(len(pool)))
+            logger.debug('pool len:'+str(len(pool)))
             for i in pool:
                 if not i.isAlive():
                     pool.remove(i)
@@ -29,6 +32,6 @@ class ThreadPool:
                 a = Worker.Worker(queue)
                 a.setDaemon(True)
                 a.start()
-                logging.debug('create thread:'+a.name)
+                logger.debug('create thread:'+a.name)
                 pool.append(a)
             time.sleep(5)

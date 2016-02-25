@@ -1,9 +1,13 @@
 #!/usr/bin/env python
-# -*- encoding:utf-8 -*-
-import logging,os,socket,struct,json,Md5,sys,traceback
+# -*- coding:utf-8 -*-
+
+import logging,Config,os,socket,struct,json,Md5,sys,traceback
+import Logger
 
 CHECKDIR = 0x0004
 CHECKFILE = 0x0003
+
+logger = Logger.getInstance()
 
 class LogClient:
 
@@ -26,14 +30,14 @@ class LogClient:
             self.__conn = False
             conn.close()
         except Exception as e:
-            logging.exception(e)
+            logger.exception(e)
  
     def checkDir(self, path):
         if not os.path.isdir(path):
             path = os.path.dirname(path)
         try:
             conn = self.getConn()
-            logging.debug(conn)
+            logger.debug(conn)
             packet = bytearray()
             cmd = CHECKDIR
             content = {"path":path}
@@ -44,14 +48,14 @@ class LogClient:
             packet.extend(struct.pack('!'+str(clen)+'s', content))
             conn.sendall(packet)
             header = conn.recv(6)
-            logging.debug('readheader'+header)
+            logger.debug('readheader'+header)
             header = struct.unpack('!HI', header)
-            logging.debug('unpack+'+json.dumps(header))
+            logger.debug('unpack+'+json.dumps(header))
             clen = header[1]
             content = conn.recv(clen)
-            logging.debug('readcontent'+content)
+            logger.debug('readcontent'+content)
             content = struct.unpack('!'+str(clen)+'s', content)
-            logging.debug('unpack+'+json.dumps(content))
+            logger.debug('unpack+'+json.dumps(content))
             content = content[0]
             data = json.loads(content)
             res = data.get('res')
@@ -59,17 +63,17 @@ class LogClient:
             return res
         except socket.error, e:
             info = sys.exc_info()
-            logging.error(traceback.extract_tb(info[2]))
-            logging.error(info)
-            logging.error(str(type(e)))
-            logging.exception(e)
+            logger.error(traceback.extract_tb(info[2]))
+            logger.error(info)
+            logger.error(str(type(e)))
+            logger.exception(e)
             self.closeConn(conn)
         except Exception as e:
             info = sys.exc_info()
-            logging.error(traceback.extract_tb(info[2]))
-            logging.error(info)
-            logging.error(str(type(e)))
-            logging.exception(e)
+            logger.error(traceback.extract_tb(info[2]))
+            logger.error(info)
+            logger.error(str(type(e)))
+            logger.exception(e)
             self.closeConn(conn)
             return False
 
@@ -78,7 +82,7 @@ class LogClient:
             try:
                 hashcode = Md5.GetFileMd5(path)
                 conn = self.getConn()
-                logging.debug(conn)
+                logger.debug(conn)
                 packet = bytearray()
                 cmd = CHECKFILE
                 content = {"path":path, "hashcode":hashcode}
@@ -87,17 +91,17 @@ class LogClient:
                 packet.extend(struct.pack("!H", cmd))
                 packet.extend(struct.pack("!I", clen))
                 packet.extend(struct.pack('!'+str(clen)+'s', content))
-                logging.debug('send'+packet)
+                logger.debug('send'+packet)
                 conn.sendall(packet)
                 header = conn.recv(6)
-                logging.debug('readheader:'+header)
+                logger.debug('readheader:'+header)
                 header = struct.unpack('!HI', header)
-                logging.debug('unpack+'+json.dumps(header))
+                logger.debug('unpack+'+json.dumps(header))
                 clen = header[1]
                 content = conn.recv(clen)
-                logging.debug('readcontent+'+content)
+                logger.debug('readcontent+'+content)
                 content = struct.unpack('!'+str(clen)+'s', content)
-                logging.debug('unpack+'+json.dumps(content))
+                logger.debug('unpack+'+json.dumps(content))
                 content = content[0]
                 data = json.loads(content)
                 res = data.get('res')
@@ -105,17 +109,17 @@ class LogClient:
                 return res
             except socket.error, e:
                 info = sys.exc_info()
-                logging.error(traceback.extract_tb(info[2]))
-                logging.error(info)
-                logging.error(str(type(e)))
-                logging.exception(e)
+                logger.error(traceback.extract_tb(info[2]))
+                logger.error(info)
+                logger.error(str(type(e)))
+                logger.exception(e)
                 self.closeConn(conn)
             except Exception as e:
                 info = sys.exc_info()
-                logging.error(traceback.extract_tb(info[2]))
-                logging.error(info)
-                logging.error(str(type(e)))
-                logging.exception(e)
+                logger.error(traceback.extract_tb(info[2]))
+                logger.error(info)
+                logger.error(str(type(e)))
+                logger.exception(e)
                 self.closeConn(conn)
                 return False
         else:

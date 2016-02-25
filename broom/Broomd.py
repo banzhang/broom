@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- encoding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 #Basic inetd server
 import sys,struct,socket,traceback,json,os,Md5,logging,time
@@ -11,6 +11,19 @@ CHECKFILE = 0x0003
 config = Config.getInstance()
 BASEPATH = config.get('server', 'storagedir')
 LOGFILE = config.get('server', 'log')
+'''配置日志'''
+config = Config.getInstance()
+file = False
+level = False
+level = config.get('client', 'loglevel')
+file = config.get('client', 'log')
+if level == 'debug':
+   level = logging.DEBUG
+else:
+   level = logging.ERROR
+
+logger = logging.getLogger(__name__)
+logger.setLevel(level)
 
 class Broomd:
 
@@ -137,16 +150,9 @@ class Broomd:
                 print 'senddata',bindata
             except Exception as e:
                 info = sys.exc_info()
-                print info
-                for file, lineno, function, text in traceback.extract_tb(info[2]):
-                   print file, "line:", lineno, "in", function
-                   print text
-            
-                print "** %s: %s" % info[:2]
-                logging.exception(e)
-                logging.error(e.args)
-                print type(e)
-                print str(e)
+                logger.error("** %s: %s" % info[:2])
+                logger.exception(e)
+                logger.error(e.args)
 
 
     '''检测目录是否存在'''

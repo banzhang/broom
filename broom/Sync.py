@@ -1,10 +1,14 @@
 #!/usr/bin/env python
+# -*- coding:utf-8 -*-
 
 import logging,pyinotify,Queue,threading,time,os
 import PyScp
 from LogClient import LogClient
 import Config
 from Util import *
+import Logger
+
+logger = Logger.getInstance()
 
 '''sync the file'''
 class Sync:
@@ -13,7 +17,7 @@ class Sync:
 
     @classmethod 
     def upload(cla, path, rtry=0):
-        logging.debug('upload start: %s'%path)
+        logger.debug('upload start: %s'%path)
         config = Config.getInstance()
         scpuser = config.get('client', 'scpuser')
         scppwd =  config.get('client', 'scppwd')
@@ -23,7 +27,7 @@ class Sync:
         port = config.get('client', 'sport')
         client = LogClient(logServer, port)
         basepath = client.checkDir(path)
-        logging.debug(basepath)
+        logger.debug(basepath)
         if not basepath:
             return False
         cmd = PyScp.buildScp(scpuser, logServer, basepath+path, path, scpconf)
@@ -31,14 +35,14 @@ class Sync:
         res = client.checkFile(path)
         if not res and rtry<scprtry:
             rtry = rtry+1
-            logging.debug('upload end: %s, %s, rtry %s'%(path, 'fail', rtry))
+            logger.debug('upload end: %s, %s, rtry %s'%(path, 'fail', rtry))
             return cla.upload(path, rtry)
         elif res:
             os.remove(path)
-            logging.debug('upload end: %s, %s, delete %s'%(path, 'succ', path))
+            logger.debug('upload end: %s, %s, delete %s'%(path, 'succ', path))
             return True
         elif not res and retry>=5:
-            logging.debug('upload end: %s, %s'%(path, 'fail'))
+            logger.debug('upload end: %s, %s'%(path, 'fail'))
             return False
 
     @classmethod
@@ -51,8 +55,6 @@ class Sync:
         localTime = time.localtime(timeStamp)
         timeFlagDay = time.strftime("%Y%m%d", localTime)
         timeFlagHour = time.strftime("%Y%m%d%H", localTime)
-        import pdb
-        pdb.set_trace()
         if len(cTimeFlag) == len(timeFlagDay):
             if cTimeFlag == timeFlagDay:
                 return False
@@ -67,5 +69,5 @@ class Sync:
         return False
 
 if __name__ == '__main__':
-    print Sync.needSync('/tmp/fs2016022301', 60)
-    print Sync.needSync('/tmp/fs20160223', 60)
+    logger.debug(Sync.needSync('/tmp/fs2016022301', 60))
+    logger.debug(Sync.needSync('/tmp/fs20160223', 60))
