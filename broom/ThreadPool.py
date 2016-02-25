@@ -15,7 +15,7 @@ class WorkerTest(threading.Thread):
         while i<6:
             logger.debug(self.name+':'+str(i))
             i = i+1
-        logging.info('end')
+        logger.info('end')
         exit()
 
 class ThreadPool:

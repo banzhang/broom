@@ -51,3 +51,6 @@ class Worker(threading.Thread):
                 if needSleep:
                     logger.debug('sleep '+self.sleeptime)
                     time.sleep(float(self.sleeptime))
+
+if __name__ == '__main__':
+    logger.debug(1)
