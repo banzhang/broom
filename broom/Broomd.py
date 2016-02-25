@@ -4,6 +4,8 @@
 #Basic inetd server
 import sys,struct,socket,traceback,json,os,Md5,logging,time
 import Config
+import Logger
+
 __author__ = "houweizong@gmail.com"
 
 CHECKDIR = 0x0004
@@ -13,17 +15,7 @@ BASEPATH = config.get('server', 'storagedir')
 LOGFILE = config.get('server', 'log')
 '''配置日志'''
 config = Config.getInstance()
-file = False
-level = False
-level = config.get('client', 'loglevel')
-file = config.get('client', 'log')
-if level == 'debug':
-   level = logging.DEBUG
-else:
-   level = logging.ERROR
-
-logger = logging.getLogger(__name__)
-logger.setLevel(level)
+logger = Logger.getInstance()
 
 class Broomd:
 
