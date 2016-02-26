@@ -52,7 +52,7 @@ class Broom:
     def run(cla):
        cla.config = Config.getInstance()
        cla.watchdir = cla.config.get('client', 'watchdir')
-       mask = pyinotify.IN_CREATE 
+       mask =  pyinotify.IN_CREATE|pyinotify.IN_MOVED_TO
        cla.buildNotify(cla.watchdir, mask)
 
 if __name__ == '__main__': 

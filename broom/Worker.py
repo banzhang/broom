@@ -35,6 +35,9 @@ class Worker(threading.Thread):
                 needSleep = True
 
             logger.info('get file: '+event)
+            if not os.path.isfile(event)
+                time.sleep(5)
+                continue
             if Sync.needSync(event, float(self.nochangetime)):
                 logger.info(' upload file:'+event)
                 res = Sync.upload(event)
