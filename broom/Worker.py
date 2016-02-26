@@ -3,7 +3,7 @@
 
 import threading,Queue,time,logging
 from Sync import Sync
-import Config,Logger
+import Config,Logger,QueuePool
 
 logger = Logger.getInstance()
 
@@ -23,7 +23,7 @@ class Worker(threading.Thread):
         while True:
             runTime = time.time()-self.startTime
             if runTime >  43200:
-                logger.debug('exit...')
+                logger.info('life end  exit...')
                 exit()
             else:
                 blockTime = 43200 - runTime
@@ -31,25 +31,28 @@ class Worker(threading.Thread):
             try:
                 event = self.syncQueue.get(True, blockTime)
             except Exception as e:
-                logger.debug('exit...')
-                exit()
+                logger.info('queue empty go sleep...')
+                needSleep = True
+
             logger.info('get file: '+event)
             if Sync.needSync(event, float(self.nochangetime)):
-                logger.debug('upload')
+                logger.info(' upload file:'+event)
                 res = Sync.upload(event)
-                if not res:
+                if not res:            
                     self.syncQueue.put(event)
                 time.sleep(5)
             else:
-                logger.debug('in changeing: '+event)
+                logger.info('in changeing: '+event)
                 needSleep = False
                 if self.syncQueue.empty():
-                    logger.debug('needsleep')
+                    logger.info('needsleep')
                     needSleep = True
-                self.syncQueue.put(event)
+                cq = QueuePool.getQueue('changeing')
+                cq.put(event)
+                time.sleep(5)
                 logger.debug('skeep..')
                 if needSleep:
-                    logger.debug('sleep '+self.sleeptime)
+                    logger.info('in sleep '+self.sleeptime)
                     time.sleep(float(self.sleeptime))
 
 if __name__ == '__main__':
