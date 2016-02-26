@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import queue.queue
+import Queue
 
 QueuePool = {}
 
@@ -10,4 +10,4 @@ def getQueue(name):
     if not QueuePool.get(name):
         QueuePool[name] = Queue.Queue()
 
-    return Queue.Pool.get(name)
+    return QueuePool.get(name)

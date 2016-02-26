@@ -23,12 +23,12 @@ class ThreadPool:
 
     def __init__(self):
         super(ThreadPool, self).__init__()
-        self.EmptyTime = 0
         
 
     @classmethod
     def start(cla, max, queue):
         pool = []
+        cla.EmptyTime = 0
         
         while True:
             logger.debug('pool len:'+str(len(pool)))
@@ -46,14 +46,15 @@ class ThreadPool:
 
     @classmethod
     def emptyCheck(cla, queue):
-        self.EmptyTime = EmptyTime+5
-        
-        if self.EmptyTime >= 605:
-            cq = QueuePool.get('changeing')
+        cla.EmptyTime = cla.EmptyTime+5
+        logger.debug('emptyCheck:'+str(cla.EmptyTime))
+        if cla.EmptyTime >= 605:
+            logger.info('reput to working queue')
+            cq = QueuePool.getQueue('changeing')
             while 1:
                 try:
                     event = cq.get(False)
                     queue.put(event)
                 except Exception, e:
-                    self.EmptyTime = 0
+                    cla.EmptyTime = 0
                     return True
