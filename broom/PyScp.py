@@ -49,7 +49,7 @@ def doScp(cmd, pd):
                 logger.debug('DONE! Here is what SSH said:')
                 logger.debug(worker.before)
                 logger.debug(worker.after)
-            j =  worker.expect([pexpect.exceptions.TIMEOUT, pexpect.exceptions.EOF])
+            j =  worker.expect([pexpect.TIMEOUT, pexpect.EOF])
             if j == 0:
                 logger.debug('ERROR! Timeout. Here is what SSH said:')
                 logger.debug(worker.before)
