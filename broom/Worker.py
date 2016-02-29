@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import threading,Queue,time,logging
+import threading,Queue,time,logging,os
 from Sync import Sync
 import Config,Logger,QueuePool
 
