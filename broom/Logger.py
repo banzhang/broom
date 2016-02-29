@@ -39,8 +39,8 @@ def initLog():
         hd = logging.StreamHandler(sys.stdout)
         hd.setLevel(level)
     else:
-        hd = logging.handlers.TimedRotatingFileHandler(file, 'H', 1)
-        hd.suffix = "%Y%m%d%H"
+        hd = logging.handlers.TimedRotatingFileHandler(file, 'D', 1)
+        hd.suffix = "%Y%m%d"
         hd.setLevel(level)
 
     Logger.addHandler(hd)

@@ -16,3 +16,9 @@ class EventHandler(pyinotify.ProcessEvent):
      logger.debug(event)
      if not event.dir:
         self.events_queue.put(event.pathname)
+
+   def process_IN_MOVED_TO(self, event):
+     logger.debug(event)
+     if not event.dir:
+        self.events_queue.put(event.pathname)
+    
