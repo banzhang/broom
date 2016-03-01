@@ -84,7 +84,7 @@ class Broomd:
                 bindata.extend(struct.pack('!H', cmd))
                 bindata.extend(struct.pack('!I', clen))
                 bindata.extend(struct.pack('!'+str(clen)+'s', content))
-                sys.stdout.write(bindata)
+                sys.stdout.write(str(bindata))
                 sys.stdout.flush()
             except Exception, e:
                 info = sys.exc_info()
