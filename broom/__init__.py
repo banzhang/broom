@@ -8,5 +8,3 @@ def main():
 
 def server():
     Broomd.run()
-
-main()
