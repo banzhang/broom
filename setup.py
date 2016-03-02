@@ -54,7 +54,7 @@ setup(
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
-    install_requires=['pexpect', 'pyinotify', 'argparse'],
+    install_requires=['pexpect', 'pyinotify', 'argparse', 'setproctitle'],
 
     extras_require={
         'dev': [],
