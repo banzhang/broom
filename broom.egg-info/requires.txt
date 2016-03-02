@@ -1,6 +1,7 @@
 pexpect
 pyinotify
 argparse
+setproctitle
 
 [dev]
 

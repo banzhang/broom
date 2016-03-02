@@ -11,6 +11,7 @@ broom/LogClient.py
 broom/Logger.py
 broom/Md5.py
 broom/PyScp.py
+broom/QueuePool.py
 broom/Sync.py
 broom/ThreadPool.py
 broom/Util.py
