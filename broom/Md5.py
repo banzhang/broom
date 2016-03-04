@@ -22,9 +22,9 @@ def GetFileMd5(filename):
     i = 0
     while True:
         i = i+1
-        b = f.read(4096)
-        size = i*4096
-        if i>0 and (size%2621440) == 0:
+        b = f.read(1024)
+        size = i*1024
+        if i>0 and (size%2097152) == 0:
             logger.info(filename+',read:'+str(size/1048576)+'Mbytes')
             time.sleep(1)
         
