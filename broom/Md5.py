@@ -1,27 +1,33 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-#python 检测文件MD5值
-#python version 2.6
  
 import hashlib
 import os,sys
- 
-#简单的测试一个字符串的MD5值
+import time,Logger
+
+logger = Logger.getInstance()
+
 def GetStrMd5(src):
     m0=hashlib.md5()
     m0.update(src)
-    print m0.hexdigest()
     pass
  
-#大文件的MD5值
 def GetFileMd5(filename):
     if not os.path.isfile(filename):
         return
     myhash = hashlib.md5()
+    
     f = file(filename,'rb')
+    i = 0
     while True:
+        i = i+1
         b = f.read(8096)
+        size = i*8096
+        if i>0 and (size%2621440) == 0:
+            logger.info(filename+',read:'+str(size/2621440)+'Mbytes')
+            time.sleep(1)
+        
         if not b :
             break
         myhash.update(b)
