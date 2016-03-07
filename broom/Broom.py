@@ -30,8 +30,10 @@ class Broom:
         client = LogClient(logServer, port)
         for i in fl:
             logger.info('get:'+i)
+            print 'get',i
             if not client.checkFile(i):
                 logger.info('put:'+i)
+                print 'put',i
                 q.put(i)
             else:
                 logger.info('del:'+i)
@@ -41,7 +43,9 @@ class Broom:
     def buildNotify(cla, path, mask):
        workerPool = list()
        syncQueue = Queue.Queue()
-       cla.reBuildQueue(syncQueue)
+       t=threading.Thread(target=cla.reBuildQueue, args=(syncQueue,))
+       t.setDaemon(True)
+       t.start()
        wm = pyinotify.WatchManager()
        workernum = cla.config.get('client', 'workernum')
        workernum = int(workernum)
