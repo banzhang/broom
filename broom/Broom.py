@@ -36,7 +36,7 @@ class Broom:
     def buildNotify(cla, path, mask):
        workerPool = list()
        syncQueue = Queue.Queue()
-       threading.Thread(target=cla.reBuildQueue, args=(syncQueue))
+       cla.reBuildQueue(syncQueue)
        wm = pyinotify.WatchManager()
        workernum = cla.config.get('client', 'workernum')
        workernum = int(workernum)
