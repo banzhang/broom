@@ -30,14 +30,13 @@ class Broom:
             if not client.checkFile(i):
                 q.put(i)
             else:
-                print 'delete %s ...'%i
                 os.remove(i)
 
     @classmethod
     def buildNotify(cla, path, mask):
        workerPool = list()
        syncQueue = Queue.Queue()
-       cla.reBuildQueue(syncQueue)
+       threadind.Thread(target=cla.reBuildQueue, args=(syncQueue))
        wm = pyinotify.WatchManager()
        workernum = cla.config.get('client', 'workernum')
        workernum = int(workernum)
