@@ -6,7 +6,9 @@ from ThreadPool import ThreadPool
 from LogClient import LogClient
 from EventHandler import EventHandler
 import Config
+import Logger
 
+logger = Logger.getInstance()
 class Broom:
 
     @classmethod
@@ -27,9 +29,12 @@ class Broom:
         port = cla.config.get('client', 'sport')
         client = LogClient(logServer, port)
         for i in fl:
+            logger.info('get:'+i)
             if not client.checkFile(i):
+                logger.info('put:'+i)
                 q.put(i)
             else:
+                logger.info('del:'+i)
                 os.remove(i)
 
     @classmethod
