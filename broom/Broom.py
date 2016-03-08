@@ -6,7 +6,9 @@ from ThreadPool import ThreadPool
 from LogClient import LogClient
 from EventHandler import EventHandler
 import Config
+import Logger
 
+logger = Logger.getInstance()
 class Broom:
 
     @classmethod
@@ -27,17 +29,23 @@ class Broom:
         port = cla.config.get('client', 'sport')
         client = LogClient(logServer, port)
         for i in fl:
+            logger.info('get:'+i)
+            print 'get',i
             if not client.checkFile(i):
+                logger.info('put:'+i)
+                print 'put',i
                 q.put(i)
             else:
-                print 'delete %s ...'%i
+                logger.info('del:'+i)
                 os.remove(i)
 
     @classmethod
     def buildNotify(cla, path, mask):
        workerPool = list()
        syncQueue = Queue.Queue()
-       cla.reBuildQueue(syncQueue)
+       t=threading.Thread(target=cla.reBuildQueue, args=(syncQueue,))
+       t.setDaemon(True)
+       t.start()
        wm = pyinotify.WatchManager()
        workernum = cla.config.get('client', 'workernum')
        workernum = int(workernum)

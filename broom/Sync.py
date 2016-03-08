@@ -31,8 +31,7 @@ class Sync:
         if not basepath:
             return False
         cmd = PyScp.buildScp(scpuser, logServer, basepath+path, path, scpconf)
-        PyScp.doScp(cmd, scppwd)
-        res = client.checkFile(path)
+        res = PyScp.doScp(cmd, scppwd)
         if not res and rtry<scprtry:
             rtry = rtry+1
             logger.debug('upload end: %s, %s, rtry %s'%(path, 'fail', rtry))
