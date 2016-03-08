@@ -1,4 +1,4 @@
-A log collection project(python>=2.7)
+A log collection project(python2>=2.7)
 =======================
 
 收集应用服务器的日志到中心存储服务器
